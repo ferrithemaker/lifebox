@@ -11,14 +11,19 @@ The goal of the project is to discover the basic concepts of biology through the
 ## The green ‘mana’ parameters
 
 **LIFE:** Life expectancy of species individuals. High values are better.
+
 **REPRODUCTION:** Reproduction capability of species individuals. High values are better.
+
 **GENERATION:** Energy generation of green species individuals. High values are better.
 
 ## The species parameters
 
 **LIFE:** Life expectancy of species individuals. High values are better.
+
 **REPRODUCTION:** Reproduction capability of species individuals. High values are better.
+
 **EFFICIENCY:** Energy consumption of species individuals. Low values are better.
+
 **GATHERING:** Energy gathering of species individuals from green species individuals. High values are better.
 
 ## Lifebox webapp
@@ -26,5 +31,19 @@ The goal of the project is to discover the basic concepts of biology through the
 **/web/*:**
 
 You can control the lifebox simulation in real time by the lifebox webapp.
+
+## Lifebox scripts
+
+**lifebox.py:**
+
+Main lifebox script, reads data from 'controllerdata' file and runs the simulation.
+
+**readanalog.py:**
+
+Reads data from Arduino based lifebox controller and saves it to 'controllerdata'.
+
+**readonline.py:**
+
+Reads data from webapp and saves it to 'controllerdata'.
 
 
