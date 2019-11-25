@@ -2,7 +2,7 @@
 
 This script allows you to simulate the evolution of a species through diferent kinds of mutations (positive / negative).
 
-The output of the program allows us to analyze the amount of accumulated mutations throughout the generations of individuals of the species.
+The output of the program allows us to analyze the amount of accumulated mutations throughout the generations of specie's individuals.
 
 ## evolution.py
 
