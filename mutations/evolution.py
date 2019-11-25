@@ -38,16 +38,16 @@ while len(individuals) > 0 and len(individuals) < maxIndividuals:
 				maxPositiveMutation = individual['positiveMutations']
 			if maxNegativeMutation < individual['negativeMutations']:
 				maxNegativeMutation = individual['negativeMutations']
-			if random.randint(0,1000) <= individual['reproduction']*10: # chances of reproduction are ok?
+			if random.randint(0,1000) <= individual['reproduction']*10: # reproduction?
 				#print("REPRODUCTION!")
 				numberOfSons = random.randint(1,maxReproductionFactor)
 				for sons in range(numberOfSons): # generates all the sons
-					if random.randint(0,10000) <= mutationChances * 100: # if there is a mutation
+					if random.randint(0,10000) <= mutationChances * 100: # mutation??!!
 						#print("MUTATION!")
 						alteration = float(random.randint(0,10) / 10.0) * mutationAlterationFactor
 						if random.randint(0,1) == 0: # negative mutation
 							individuals.append({'reproduction' : individual['reproduction'] - alteration, 'negativeMutations' : individual['negativeMutations'] + 1, 'positiveMutations' : individual['positiveMutations'], 'generation' : individual['generation']+1})	
-						else: # positive mutations
+						else: # positive mutation
 							individuals.append({'reproduction' : individual['reproduction'] + alteration, 'negativeMutations' : individual['negativeMutations'], 'positiveMutations' : individual['positiveMutations'] + 1, 'generation' : individual['generation']+1})	
 					else: # no mutation
 						individuals.append({'reproduction' : individual['reproduction'], 'negativeMutations' : individual['negativeMutations'], 'positiveMutations' : individual['positiveMutations'], 'generation' : individual['generation']+1})	
