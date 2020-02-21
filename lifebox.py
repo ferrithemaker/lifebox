@@ -5,7 +5,7 @@ import threading
 import time
 import os
 from pyfirmata import ArduinoMega, util
-#import rtmidi # midi library
+import rtmidi # midi library
 
 import lifebox_constants as constants
 
@@ -57,8 +57,6 @@ def plants_next_iteration(x,y):
 	# potData[2] Generation [Plants] A2
 	plantsgeneration = map(potData[2],0,1023,0,100)
 
-	#if midi_enable:
-	#			midiout.send_message(note_off_white)
 	# adjacent coordinates
 	xp = (x+1)
 	if xp >= matrix_size_x:
@@ -114,8 +112,6 @@ def plants_next_iteration(x,y):
 			plants[x][y][0] = 1
 			plants[x][y][1] = constants.PLANTS_ENERGY_BASE_PER_CYCLE + int(plantsgeneration)
 			plants_individuals += 1
-			#if midi_enable:
-			#	midiout.send_message(note_on_white)
 			full_matrix_plants_energy += plants[x][y][1]
 	# spontaneous generation
 	if int(plants[x][y][0] == 0) and neighbours == 0 and plants[x][y][2] == 0 and ((plants_last_individuals == 0 and plants_individuals == 0 and real_mode == True) or real_mode == False):
@@ -125,8 +121,6 @@ def plants_next_iteration(x,y):
 			plants[x][y][1] = constants.PLANTS_ENERGY_BASE_PER_CYCLE + int(plantsgeneration)
 			plants_individuals += 1
 			full_matrix_plants_energy += plants[x][y][1]
-			#if midi_enable:
-			#	midiout.send_message(note_on_white)
 			
 
 	
@@ -152,11 +146,6 @@ def species_next_iteration(x,y):
 	sp2vitality = map(potData[7],0,1023,0,100)
 	sp2efficency = map(potData[9],0,1023,0,110)
 	sp2gathering = map(potData[10],0,1023,0,130)
-
-	# midi
-	if midi_enable:
-		midiout.send_message(note_off_blue)
-		midiout.send_message(note_off_yellow)
 
 	# adjacent coordinates
 	xp = (x+1)
@@ -306,8 +295,7 @@ def species_next_iteration(x,y):
 							specie1[xp][yp][1] = constants.SPECIE1_ENERGY_BASE
 							#print "("+str(xp)+","+str(yp)+") born"
 						#print "end of reproduction"
-						if midi_enable:
-							midiout.send_message(note_on_yellow)
+
 		# die if too old
 		if specie1[x][y][0] > constants.SPECIE1_LIFE_EXPECTANCY + int(sp1vitality):
 			specie1[x][y][1] = 0
@@ -323,8 +311,6 @@ def species_next_iteration(x,y):
 			specie1[x][y][0] = 1
 			specie1[x][y][1] = constants.SPECIE1_ENERGY_BASE
 			#print "("+str(x)+","+str(y)+") random born"
-			if midi_enable:
-				midiout.send_message(note_on_yellow)
 			specie1_individuals += 1
 			full_matrix_specie1_energy += specie1[x][y][1]
 			
@@ -424,8 +410,7 @@ def species_next_iteration(x,y):
 							specie2[xp][yp][1] = constants.SPECIE2_ENERGY_BASE
 							#print "("+str(xp)+","+str(yp)+") born"
 						#print "end of reproduction"
-						if midi_enable:
-							midiout.send_message(note_on_blue)
+
 		# die if too old
 		if specie2[x][y][0] > constants.SPECIE2_LIFE_EXPECTANCY + int(sp2vitality):
 			specie2[x][y][1] = 0
@@ -441,8 +426,6 @@ def species_next_iteration(x,y):
 			specie2[x][y][0] = 1
 			specie2[x][y][1] = constants.SPECIE2_ENERGY_BASE
 			#print "("+str(x)+","+str(y)+") random born"
-			if midi_enable:
-				midiout.send_message(note_on_blue)
 			specie2_individuals += 1
 			full_matrix_specie2_energy += specie2[x][y][1]
 
@@ -579,7 +562,7 @@ if len(sys.argv) != 2 and len(sys.argv) != 3:
 		print("Usage: lifebox2.py --app or lifebox2.py --controller [SERIAL_DEVICE]")
 		sys.exit(0)
 
-# run thread
+# run data controller thread
 stop = False
 if app_mode == False:
 	t = threading.Thread(target=readPotDatafromArduino,args=(stop,))
@@ -588,23 +571,71 @@ else:
 t.daemon = True
 t.start()
 
+# run midi output thread
+midiStop = False
+if midi_enable == True:
+	tmidi = threading.Thread(target=generativeSound,args=(midiStop,))
+	tmidi.daemon = True
+	tmidi.start()
+
 #pygame setup
 
 pygame.init()
 pygame.font.init()
 
-# midi setup
-if midi_enable:
+# midi chords
+def majorChordGenerator():
+    startValue = random.randint(50,60)
+    return ([startValue,startValue+4,startValue+7])
+
+def minorChordGenerator():
+    startValue = random.randint(50,60)
+    return ([startValue,startValue+3,startValue+7])
+
+def augmentedChordGenerator():
+    startValue = random.randint(50,60)
+    return ([startValue,startValue+4,startValue+8])
+
+def reducedChordGenerator():
+    startValue = random.randint(50,60)
+    return ([startValue,startValue+3,startValue+6])
+
+# midi output function
+def generativeSound(midiStop):
 	midiout = rtmidi.MidiOut()
 	available_ports = midiout.get_ports()
-	midiout.open_port(1) # this is my default Roland JD-Xi port, you must change it, check available_ports.
-	note_on_white = [0x90,60,112] # channel 1, note C , velocity 112
-	note_on_blue = [0x90,64,112] # channel 1, note E , velocity 112
-	note_on_yellow = [0x90,67,112] # channel 1, note G , velocity 112
-	note_off_white = [0x80,60,0]
-	note_off_blue = [0x80,64,0]
-	note_off_yellow = [0x80,67,0]
-	
+	#print (available_ports)
+	#print (midiout.get_port_count())
+	midiout.open_port(1)
+
+	# nasty way to stop all sounds
+	for iter in range(0,10):
+		for i in range(50,70):
+			midiout.send_message([0x80,i,0])
+
+	try:
+		while not midiStop:
+			chordType = random.randint(0,3)
+			if specie1_individuals > specie2_individuals:
+				chord = majorChordGenerator()
+			else:
+				chord = minorChordGenerator()
+			#if chordType == 0: chord = majorChordGenerator()
+			#if chordType == 1: chord = minorChordGenerator()
+			#if chordType == 2: chord = augmentedChordGenerator()
+			#if chordType == 3: chord = reducedChordGenerator()
+			midiout.send_message([0x90,chord[0],30])
+			midiout.send_message([0x90,chord[1],30])
+			midiout.send_message([0x90,chord[2],30])
+			time.sleep(float(random.randint(3000,5000)/1000))
+			midiout.send_message([0x80,chord[0],0])
+			midiout.send_message([0x80,chord[1],0])
+			midiout.send_message([0x80,chord[2],0])
+	except KeyboardInterrupt:
+		del midiout
+
+
+
 
 pygame.display.set_caption('LifeBox')
 
@@ -670,11 +701,13 @@ while (True):
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			stop = True
+			midiStop = True
 			pygame.quit()
 			sys.exit()
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_q:
 				stop = True
+				midiStop = True
 				pygame.quit()
 				sys.exit()
 
