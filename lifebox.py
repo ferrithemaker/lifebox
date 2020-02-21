@@ -36,9 +36,18 @@ sp2efficency = 0
 # potData[10] Gathering [Specie2] A10
 sp2gathering = 0
 
+# graph arrays
 
+specie1IndividualsArray = [0 for x in range(200)]
+specie2IndividualsArray = [0 for x in range(200)]
+plantsIndividualsArray = [0 for x in range(200)]
+specie1EnergyArray = [0 for x in range(200)]
+specie2EnergyArray = [0 for x in range(200)]
+plantsEnergyArray = [0 for x in range(200)]
 
-
+specie2_individuals = 0
+specie1_individuals = 0
+plants_individuals = 0
 
 
 # lifebox functions
@@ -436,7 +445,7 @@ def map(x,in_min,in_max,out_min,out_max):
 	if x <= in_min:
 		mapvalue = out_min
 	if x < in_max and x > in_min:
-		mapvalue = int((float(x) - float(in_min)) * (float(out_max) - float(out_min)) / (float(in_max) - float(in_min)) + float(out_min)) 
+		mapvalue = int((float(x) - float(in_min)) * (float(out_max) - float(out_min)) / (float(in_max) - float(in_min)) + float(out_min))
 	return mapvalue
 
 def draw_species(x,y):
@@ -499,6 +508,60 @@ def draw_species(x,y):
 		screen.blit(deb_sp2eff,(400,410))
 		screen.blit(deb_sp2gath,(400,450))
 
+# midi thread functions
+
+# midi chords
+def majorChordGenerator():
+    startValue = random.randint(50,60)
+    return ([startValue,startValue+4,startValue+7])
+
+def minorChordGenerator():
+    startValue = random.randint(50,60)
+    return ([startValue,startValue+3,startValue+7])
+
+def augmentedChordGenerator():
+    startValue = random.randint(50,60)
+    return ([startValue,startValue+4,startValue+8])
+
+def reducedChordGenerator():
+    startValue = random.randint(50,60)
+    return ([startValue,startValue+3,startValue+6])
+
+# midi output function
+def generativeSound(midiStop):
+    midiout = rtmidi.MidiOut()
+    available_ports = midiout.get_ports()
+    #print (available_ports)
+    #print (midiout.get_port_count())
+    midiout.open_port(1)
+
+    # nasty way to stop all sounds
+    for iter in range(0,10):
+        for i in range(50,70):
+            midiout.send_message([0x80,i,0])
+    try:
+        while not midiStop:
+            chordType = random.randint(0,3)
+            if specie1_individuals > specie2_individuals:
+                chord = majorChordGenerator()
+            else:
+                chord = minorChordGenerator()
+            #if chordType == 0: chord = majorChordGenerator()
+            #if chordType == 1: chord = minorChordGenerator()
+            #if chordType == 2: chord = augmentedChordGenerator()
+            #if chordType == 3: chord = reducedChordGenerator()
+            midiout.send_message([0x90,chord[0],30])
+            midiout.send_message([0x90,chord[1],30])
+            midiout.send_message([0x90,chord[2],30])
+            time.sleep(float(random.randint(3000,5000)/1000))
+            midiout.send_message([0x80,chord[0],0])
+            midiout.send_message([0x80,chord[1],0])
+            midiout.send_message([0x80,chord[2],0])
+    except KeyboardInterrupt:
+        del midiout
+
+
+# read data from source (app or controller)
 
 def readPotDatafromFile(stop):
 	global potData
@@ -537,7 +600,7 @@ def readPotDatafromArduino(stop):
 	#print("Arduino connection error! Change to app mode.")
 	#os._exit(1)
 
-midi_enable = False # play generative sound through midi out (under development)
+midi_enable = True # play generative sound through midi out (under development)
 graph_mode = False # show graphs
 real_mode = True # respawn control
 gradient_mode = True # individual fade in / out linked to energy
@@ -546,6 +609,7 @@ fullscreen_graph = False
 debug = False
 rf = 2 # reduction factor
 
+# parameters control
 if len(sys.argv) == 2: # no serial device
 	if sys.argv[1]!="--app":
 		print("Usage: lifebox2.py --app or lifebox2.py --controller [SERIAL_DEVICE]")
@@ -583,59 +647,6 @@ if midi_enable == True:
 pygame.init()
 pygame.font.init()
 
-# midi chords
-def majorChordGenerator():
-    startValue = random.randint(50,60)
-    return ([startValue,startValue+4,startValue+7])
-
-def minorChordGenerator():
-    startValue = random.randint(50,60)
-    return ([startValue,startValue+3,startValue+7])
-
-def augmentedChordGenerator():
-    startValue = random.randint(50,60)
-    return ([startValue,startValue+4,startValue+8])
-
-def reducedChordGenerator():
-    startValue = random.randint(50,60)
-    return ([startValue,startValue+3,startValue+6])
-
-# midi output function
-def generativeSound(midiStop):
-	midiout = rtmidi.MidiOut()
-	available_ports = midiout.get_ports()
-	#print (available_ports)
-	#print (midiout.get_port_count())
-	midiout.open_port(1)
-
-	# nasty way to stop all sounds
-	for iter in range(0,10):
-		for i in range(50,70):
-			midiout.send_message([0x80,i,0])
-
-	try:
-		while not midiStop:
-			chordType = random.randint(0,3)
-			if specie1_individuals > specie2_individuals:
-				chord = majorChordGenerator()
-			else:
-				chord = minorChordGenerator()
-			#if chordType == 0: chord = majorChordGenerator()
-			#if chordType == 1: chord = minorChordGenerator()
-			#if chordType == 2: chord = augmentedChordGenerator()
-			#if chordType == 3: chord = reducedChordGenerator()
-			midiout.send_message([0x90,chord[0],30])
-			midiout.send_message([0x90,chord[1],30])
-			midiout.send_message([0x90,chord[2],30])
-			time.sleep(float(random.randint(3000,5000)/1000))
-			midiout.send_message([0x80,chord[0],0])
-			midiout.send_message([0x80,chord[1],0])
-			midiout.send_message([0x80,chord[2],0])
-	except KeyboardInterrupt:
-		del midiout
-
-
-
 
 pygame.display.set_caption('LifeBox')
 
@@ -650,7 +661,7 @@ else:
 	screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 	matrix_size_x = 61 #61 at size 15 # max 92 at size 10
 	matrix_size_y = 33 # 33 at size 15 # max 50 at size 10
-	circle_size = 15 
+	circle_size = 15
 
 textfont = pygame.font.SysFont('arial',30)
 debugfont = pygame.font.SysFont('arial',15)
@@ -678,22 +689,11 @@ plants = [[[0 for x in range(t)] for y in range(h)] for z in range(w)]
 
 # [x][y] [0]:age [1]:energy [2]:mask
 
-# graph arrays
-
-specie1IndividualsArray = [0 for x in range(200)]
-specie2IndividualsArray = [0 for x in range(200)]
-plantsIndividualsArray = [0 for x in range(200)]
-specie1EnergyArray = [0 for x in range(200)]
-specie2EnergyArray = [0 for x in range(200)]
-plantsEnergyArray = [0 for x in range(200)]
-
-specie2_individuals = 0
-specie1_individuals = 0
-plants_individuals = 0
-
 # screen for transparent graph
 if fullscreen_graph == True and fullscreen_mode == True:
 	graphsurface = pygame.Surface((1920, 1080), pygame.SRCALPHA, 32)
+
+# MAIN PROGRAM LOGIC
 
 while (True):
 	msElapsed = clock.tick(10)
