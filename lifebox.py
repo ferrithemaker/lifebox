@@ -539,26 +539,27 @@ def generativeSound(midiStop):
     for iter in range(0,10):
         for i in range(50,70):
             midiout.send_message([0x80,i,0])
-    try:
-        while not midiStop:
-            chordType = random.randint(0,3)
-            if specie1_individuals > specie2_individuals:
-                chord = majorChordGenerator()
-            else:
-                chord = minorChordGenerator()
-            #if chordType == 0: chord = majorChordGenerator()
-            #if chordType == 1: chord = minorChordGenerator()
-            #if chordType == 2: chord = augmentedChordGenerator()
-            #if chordType == 3: chord = reducedChordGenerator()
-            midiout.send_message([0x90,chord[0],30])
-            midiout.send_message([0x90,chord[1],30])
-            midiout.send_message([0x90,chord[2],30])
-            time.sleep(float(random.randint(3000,5000)/1000))
-            midiout.send_message([0x80,chord[0],0])
-            midiout.send_message([0x80,chord[1],0])
-            midiout.send_message([0x80,chord[2],0])
-    except KeyboardInterrupt:
-        del midiout
+    while not midiStop:
+        chordType = random.randint(0,3)
+        if specie1_individuals > specie2_individuals:
+            chord = majorChordGenerator()
+        else:
+            chord = minorChordGenerator()
+        #if chordType == 0: chord = majorChordGenerator()
+        #if chordType == 1: chord = minorChordGenerator()
+        #if chordType == 2: chord = augmentedChordGenerator()
+        #if chordType == 3: chord = reducedChordGenerator()
+        midiout.send_message([0x90,chord[0],30])
+        midiout.send_message([0x90,chord[1],30])
+        midiout.send_message([0x90,chord[2],30])
+        time.sleep(float(random.randint(3000,5000)/1000))
+        midiout.send_message([0x80,chord[0],0])
+        midiout.send_message([0x80,chord[1],0])
+        midiout.send_message([0x80,chord[2],0])
+    for iter in range(0,10):
+        for i in range(50,70):
+            midiout.send_message([0x80,i,0])
+    del midiout
 
 
 # read data from source (app or controller)
