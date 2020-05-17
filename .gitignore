@@ -2,3 +2,17 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.iml
+.gradle
+/LifeboxInformationApp/local.properties
+/LifeboxInformationApp/.idea/caches
+/LifeboxInformationApp/.idea/libraries
+/LifeboxInformationApp/.idea/modules.xml
+/LifeboxInformationApp/.idea/workspace.xml
+/LifeboxInformationApp/.idea/navEditor.xml
+/LifeboxInformationApp/.idea/assetWizardSettings.xml
+.DS_Store
+/LifeboxInformationApp/build
+/LifeboxInformationApp/captures
+.externalNativeBuild
+.cxx
