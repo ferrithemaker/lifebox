@@ -4,9 +4,13 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 
 /**
@@ -24,6 +28,7 @@ public class MainScreenFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+
     public MainScreenFragment() {
         // Required empty public constructor
     }
@@ -40,6 +45,7 @@ public class MainScreenFragment extends Fragment {
     public static MainScreenFragment newInstance(String param1, String param2) {
         MainScreenFragment fragment = new MainScreenFragment();
         Bundle args = new Bundle();
+
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
@@ -53,12 +59,19 @@ public class MainScreenFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_screen, container, false);
+        //TextView about = container.findViewById(R.id.about_text_view);
+        //about.setText(R.string.about_text);
+        View fragmentview =  inflater.inflate(R.layout.fragment_main_screen, container, false);
+        TextView mainScreenFragmentText = fragmentview.findViewById(R.id.about_text_view);
+        mainScreenFragmentText.setText(R.string.about_text);
+        return fragmentview;
     }
 }

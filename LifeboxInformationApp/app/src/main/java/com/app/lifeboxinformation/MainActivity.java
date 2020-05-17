@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     GeneralInfoFragment myGeneralInfoScreen = new GeneralInfoFragment();
     ManaFragment myManaScreen = new ManaFragment();
 
-
+    TextView mainScreenFragmentText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         FragmentManager myFragmentManager = getSupportFragmentManager();
         FragmentTransaction myFragmentTransaction = myFragmentManager.beginTransaction();
@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.yellow_species_info:
-
                 myFragmentTransaction.replace(R.id.placeholder, myYellowScreen);
                 myFragmentTransaction.commit();
                 break;
