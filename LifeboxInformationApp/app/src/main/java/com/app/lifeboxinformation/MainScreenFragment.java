@@ -70,8 +70,8 @@ public class MainScreenFragment extends Fragment {
         //TextView about = container.findViewById(R.id.about_text_view);
         //about.setText(R.string.about_text);
         View fragmentview =  inflater.inflate(R.layout.fragment_main_screen, container, false);
-        TextView mainScreenFragmentText = fragmentview.findViewById(R.id.about_text_view);
-        mainScreenFragmentText.setText(R.string.about_text);
+        //TextView mainScreenFragmentText = fragmentview.findViewById(R.id.about_text_view);
+        //mainScreenFragmentText.setText(R.string.about_text);
         return fragmentview;
     }
 }

@@ -18,12 +18,10 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     MainScreenFragment myMainScreen = new MainScreenFragment(); // fragments creation
-    YellowFragment myYellowScreen = new YellowFragment();
-    BlueFragment myBlueScreen = new BlueFragment();
+    SpeciesFragment mySpeciesScreen = new SpeciesFragment();
     GeneralInfoFragment myGeneralInfoScreen = new GeneralInfoFragment();
     ManaFragment myManaScreen = new ManaFragment();
 
-    TextView mainScreenFragmentText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,21 +62,14 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction myFragmentTransaction = myFragmentManager.beginTransaction();
 
         switch (item.getItemId()) {
-            case R.id.yellow_species_info:
-                myFragmentTransaction.replace(R.id.placeholder, myYellowScreen);
+            case R.id.species_info:
+                myFragmentTransaction.replace(R.id.placeholder, mySpeciesScreen);
                 myFragmentTransaction.commit();
                 break;
-
-            case R.id.blue_species_info:
-                myFragmentTransaction.replace(R.id.placeholder, myBlueScreen);
-                myFragmentTransaction.commit();
-                break;
-
             case R.id.mana_info:
                 myFragmentTransaction.replace(R.id.placeholder, myManaScreen);
                 myFragmentTransaction.commit();
                 break;
-
             case R.id.general_info:
                 myFragmentTransaction.replace(R.id.placeholder, myGeneralInfoScreen);
                 myFragmentTransaction.commit();
