@@ -1,29 +1,9 @@
 <resources>
     <string name="app_name">Lifebox Information</string>
 
-    <string name="species_info">
-        Inside the LifeBox you can find two species, and both species have a set of parameters that defines how they can evolve inside the virtual ecosystem. You can change each parameter of each species individually.<br></br>
-        <b>The species parameters</b><br></br>
-        <b>LIFE:</b> Life expectancy of species individuals. <i>High values are better.</i><br></br>
-        <b>REPRODUCTION:</b> Reproduction capability of species individuals. <i>High values are better.</i><br></br>
-        <br><b>EFFICIENCY:</b> Energy consumption of species individuals. <i>Low values are better.</i></br>
-        <br><b>GATHERING:</b> Energy gathering of species individuals from green species individuals. <i>High values are better.</i></br>
-    </string>
-
-    <string name="mana_info">
-        <p>Every species need to gather energy from the green mana to grow, reproduce and survive. This mana also has a set of parameters that defines its behavior inside the LifeBox ecosystem.</p>
-        <p><b>The green ‘mana’ parameters</b></p>
-        <p><b>LIFE:</b> Life expectancy of species individuals.<i>High values are better.</i></p>
-        <p><b>REPRODUCTION:</b> Reproduction capability of species individuals. <i>High values are better.</i></p>
-        <p><b>GENERATION:</b> Energy generation of green species individuals.<i> High values are better.</i></p>
-    </string>
 
     <string name="general_info">
-        <p>LifeBox is project about a virtual ecosystem. The project started in 2015 and is still in constant evolution.</p>
-        <p>Inside the LifeBox you can find two different kind of species, the ‘species’ and the ‘mana’. Each of the ‘species’ have a set of parameters that defines how they evolve inside the virtual ecosystem, and you can change all the parameter of species in real-time.</p>
-        <p>The ‘species’ need to gather energy from the ‘mana’ to grow, replicate itself and survive. The ‘mana’ has also a set of parameters that defines its behavior inside the LifeBox ecosystem.</p>
-        <p>The goal of the project is to offer the possibility to learn the basic concepts of biology through the experimentation, viewing the consequences of your actions and trying to find the way to balance the ecosystem through changing the LifeBox ‘species’ and ‘mana’ parameters.</p>
-    </string>
+         </string>
 
     <string name="about_text">
         Aquí va la foto.
