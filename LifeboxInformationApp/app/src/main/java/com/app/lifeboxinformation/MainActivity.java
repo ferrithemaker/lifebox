@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Lifebox website", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Lifebox controller website", Snackbar.LENGTH_LONG)
                         .setAction("VISIT", new View.OnClickListener() {
                             @Override
                                 public void onClick(View view) {
