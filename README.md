@@ -46,4 +46,11 @@ Reads data from Arduino based lifebox controller and saves it to 'controllerdata
 
 Reads data from webapp and saves it to 'controllerdata'.
 
+## Lifebox Android app
 
+You can download the Lifebox Information App from Google Play.
+
+https://play.google.com/store/apps/details?id=com.app.lifeboxinformation&gl=ES
+
+You can also download the application source code from the LifeboxInformationApp folder from the repo.
+ 
