@@ -601,7 +601,7 @@ def readPotDatafromArduino(stop):
 	#print("Arduino connection error! Change to app mode.")
 	#os._exit(1)
 
-midi_enable = True # play generative sound through midi out (under development)
+midi_enable = False # play generative sound through midi out (under development)
 graph_mode = False # show graphs
 real_mode = True # respawn control
 gradient_mode = True # individual fade in / out linked to energy
@@ -613,18 +613,18 @@ rf = 2 # reduction factor
 # parameters control
 if len(sys.argv) == 2: # no serial device
 	if sys.argv[1]!="--app":
-		print("Usage: lifebox2.py --app or lifebox2.py --controller [SERIAL_DEVICE]")
+		print("Usage: lifebox.py --app or lifebox.py --controller [SERIAL_DEVICE]")
 		sys.exit(0)
 	else:
 		app_mode = True # app (data from file) mode
 if len(sys.argv) == 3: # serial device
 	if sys.argv[1]!="--controller":
-		print("Usage: lifebox2.py --app or lifebox2.py --controller [SERIAL_DEVICE]")
+		print("Usage: lifebox.py --app or lifebox.py --controller [SERIAL_DEVICE]")
 		sys.exit(0)
 	else:
 		app_mode = False # get data directly from controller
 if len(sys.argv) != 2 and len(sys.argv) != 3:
-		print("Usage: lifebox2.py --app or lifebox2.py --controller [SERIAL_DEVICE]")
+		print("Usage: lifebox.py --app or lifebox.py --controller [SERIAL_DEVICE]")
 		sys.exit(0)
 
 # run data controller thread
