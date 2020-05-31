@@ -1,5 +1,6 @@
 import rtmidi
 import time
+import random
 
 # midi thread functions
 
@@ -27,22 +28,13 @@ available_ports = midiout.get_ports()
 #print (midiout.get_port_count())
 midiout.open_port(1)
 
-# nasty way to stop all sounds
-for iter in range(0,10):
-	for i in range(50,70):
-	    midiout.send_message([0x80,i,0])
-
 try:
 	while True:
 		chordType = random.randint(0,3)
-		if specie1_individuals > specie2_individuals:
-		    chord = majorChordGenerator()
-		else:
-		    chord = minorChordGenerator()
-		#if chordType == 0: chord = majorChordGenerator()
-		#if chordType == 1: chord = minorChordGenerator()
-		#if chordType == 2: chord = augmentedChordGenerator()
-		#if chordType == 3: chord = reducedChordGenerator()
+		if chordType == 0: chord = majorChordGenerator()
+		if chordType == 1: chord = minorChordGenerator()
+		if chordType == 2: chord = augmentedChordGenerator()
+		if chordType == 3: chord = reducedChordGenerator()
 		midiout.send_message([0x90,chord[0],30])
 		midiout.send_message([0x90,chord[1],30])
 		midiout.send_message([0x90,chord[2],30])
@@ -54,6 +46,7 @@ try:
 			for i in range(50,70):
 			    midiout.send_message([0x80,i,0])
 except KeyboardInterrupt:
+	# nasty
 	for iter in range(0,10):
 		for i in range(50,70):
 	    		midiout.send_message([0x80,i,0])
