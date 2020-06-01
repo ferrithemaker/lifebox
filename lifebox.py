@@ -511,55 +511,81 @@ def draw_species(x,y):
 # midi thread functions
 
 # midi chords
-def majorChordGenerator():
+def randomMajorChordGenerator():
     startValue = random.randint(50,60)
     return ([startValue,startValue+4,startValue+7])
 
-def minorChordGenerator():
+def majorChordGenerator(startValue):
+    return ([startValue,startValue+4,startValue+7])
+
+def randomMinorChordGenerator():
     startValue = random.randint(50,60)
     return ([startValue,startValue+3,startValue+7])
 
-def augmentedChordGenerator():
+def minorChordGenerator(startValue):
+    return ([startValue,startValue+3,startValue+7])
+
+def randomAugmentedChordGenerator():
     startValue = random.randint(50,60)
     return ([startValue,startValue+4,startValue+8])
 
-def reducedChordGenerator():
+def randomReducedChordGenerator():
     startValue = random.randint(50,60)
     return ([startValue,startValue+3,startValue+6])
 
+def setOctave(note):
+	octave = random.randint(0,2)
+	if octave == 0:
+		note = note - 12
+	if octave == 2:
+		note = note + 12
+	return note
+
 # midi output function
 def generativeSound(midiStop):
-    midiout = rtmidi.MidiOut()
-    available_ports = midiout.get_ports()
-    #print (available_ports)
-    #print (midiout.get_port_count())
-    midiout.open_port(1)
+	midiout = rtmidi.MidiOut()
+	available_ports = midiout.get_ports()
+	#print (available_ports)
+	#print (midiout.get_port_count())
+	midiout.open_port(1)
 
-    # nasty way to stop all sounds
-    for iter in range(0,10):
-        for i in range(50,70):
-            midiout.send_message([0x80,i,0])
-    while not midiStop:
-        chordType = random.randint(0,3)
-        if specie1_individuals > specie2_individuals:
-            chord = majorChordGenerator()
-        else:
-            chord = minorChordGenerator()
-        #if chordType == 0: chord = majorChordGenerator()
-        #if chordType == 1: chord = minorChordGenerator()
-        #if chordType == 2: chord = augmentedChordGenerator()
-        #if chordType == 3: chord = reducedChordGenerator()
-        midiout.send_message([0x90,chord[0],30])
-        midiout.send_message([0x90,chord[1],30])
-        midiout.send_message([0x90,chord[2],30])
-        time.sleep(float(random.randint(3000,5000)/1000))
-        midiout.send_message([0x80,chord[0],0])
-        midiout.send_message([0x80,chord[1],0])
-        midiout.send_message([0x80,chord[2],0])
-    for iter in range(0,10):
-        for i in range(50,70):
-            midiout.send_message([0x80,i,0])
-    del midiout
+	# nasty way to stop all sounds
+	for iter in range(0,5):
+		for i in range(40,90):
+			midiout.send_message([0x80,i,0])
+
+	while not midiStop:
+		csec = random.randint(0,9)
+		for note in chordSecuence[csec]:
+			if specie1_individuals > specie2_individuals:
+				chord = majorChordGenerator(note)
+			else:
+				chord = minorChordGenerator(note)
+			firstnote = setOctave(chord[0])
+			secondnote = setOctave(chord[1])
+			thirdnote = setOctave(chord[2])
+			midiout.send_message([0x90,firstnote,30])
+			if arpegio == True:
+				time.sleep(float(60/tempo))
+				midiout.send_message([0x80,firstnote,0])
+			midiout.send_message([0x90,secondnote,30])
+			if arpegio == True:
+				time.sleep(float(60/tempo))
+				midiout.send_message([0x80,secondnote,0])
+			midiout.send_message([0x90,thirdnote,30])
+			if arpegio == True:
+				time.sleep(float(60/tempo))
+				midiout.send_message([0x80,thirdnote,0])
+			if arpegio == False:
+				time.sleep(float(random.randint(3,5))) # wait 3 to 5 sec for each chord 
+				midiout.send_message([0x80,firstnote,0])
+				midiout.send_message([0x80,secondnote,0])
+				midiout.send_message([0x80,thirdnote,0])
+	# nasty way to stop all sounds
+	for iter in range(0,5):
+		for i in range(40,90):
+			midiout.send_message([0x80,i,0])
+	del midiout
 
 
 # read data from source (app or controller)
@@ -601,7 +627,7 @@ def readPotDatafromArduino(stop):
 	#print("Arduino connection error! Change to app mode.")
 	#os._exit(1)
 
-midi_enable = False # play generative sound through midi out (under development)
+midi_enable = True # play generative sound through midi out (beta)
 graph_mode = False # show graphs
 real_mode = True # respawn control
 gradient_mode = True # individual fade in / out linked to energy
@@ -609,6 +635,12 @@ fullscreen_mode = True
 fullscreen_graph = False
 debug = False
 rf = 2 # reduction factor
+
+# midi set-up
+tempo = 30
+arpegio = False
+chordSecuence = [[69,65,60,67],[60,67,69,65],[65,69,60,67],[65,67,69,67],[65,67,69,60],[65,67,69,64],[69,64,65,67],[69,64,60,67],[60,62,69,65],[69,62,65,67]]
+
 
 # parameters control
 if len(sys.argv) == 2: # no serial device
