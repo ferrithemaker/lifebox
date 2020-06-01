@@ -5,7 +5,7 @@ import threading
 import time
 import os
 from pyfirmata import ArduinoMega, util
-import rtmidi # midi library
+import rtmidi # midi library. There's a lot of rtmidi pyhton implementations, this one is python-rtmidi
 
 import lifebox_constants as constants
 
