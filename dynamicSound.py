@@ -2,7 +2,7 @@ import rtmidi
 import time
 import random
 
-# midi thread functions
+# GENERATIVE CHORDS TESTING ONLY
 
 # midi chords
 def randomMajorChordGenerator():
