@@ -550,7 +550,7 @@ def generativeSound(midiStop):
 	midiout.open_port(1)
 
 	# nasty way to stop all sounds
-	for iter in range(0,5):
+	for iter in range(0,10):
 		for i in range(40,90):
 			midiout.send_message([0x80,i,0])
 
@@ -582,7 +582,7 @@ def generativeSound(midiStop):
 				midiout.send_message([0x80,secondnote,0])
 				midiout.send_message([0x80,thirdnote,0])
 	# nasty way to stop all sounds
-	for iter in range(0,5):
+	for iter in range(0,10):
 		for i in range(40,90):
 			midiout.send_message([0x80,i,0])
 	del midiout
@@ -743,6 +743,8 @@ while (True):
 				midiStop = True
 				pygame.quit()
 				sys.exit()
+			if event.key == pygame.K_a:
+				arpegio = not(arpegio)
 
 	# init totals
 	plants_last_individuals = plants_individuals
