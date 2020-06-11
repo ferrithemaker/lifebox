@@ -40,7 +40,7 @@ void draw() {
   background(0);
   for (int x = 0; x < matrixSizeX; x++) {
     for (int y = 0; y < matrixSizeY; y++) {
-      calculateNextIteration(x,y);
+      calculatePlantsNextIteration(x,y);
       stroke(0,map(plantsMatrix[x][y][1],0,12000,0,240),0);
       fill(0,map(plantsMatrix[x][y][1],0,12000,0,240),0);
       ellipse((x+1)*(circleSize+padding),(y+1)*(circleSize+padding),circleSize,circleSize);
@@ -49,7 +49,7 @@ void draw() {
   //delay(10);
 }
 
-void calculateNextIteration(int x,int y) {
+void calculatePlantsNextIteration(int x,int y) {
   int neighbours = 0;
   int plantsReproduction = plantsParameters[0];
   int plantsVitality = plantsParameters[1];
