@@ -3,19 +3,20 @@
  */
 
 // screen variables
-int matrixSizeX = 61;
-int matrixSizeY = 33;
-int circleSize = 15;
+int matrixSizeX = 75;
+int matrixSizeY = 42;
+int circleSize = 20;
 int padding = 5;
 int screenSizeX = (matrixSizeX*(circleSize+padding));
 int screenSizeY = (matrixSizeY*(circleSize+padding));
 
-// plants matrix
+// plants variables
 int[][][] plantsMatrix = new int[matrixSizeX][matrixSizeY][2];
-int plants_individuals = 0;
+int plantsCount = 0;
+int plantsCountLastIteration = 0;
 
 // harcoded plants data parameters
-int[] plantsParameters={ 20, 20, 20} ;
+int[] plantsParameters={ 100, 100, 100} ;
 int PLANTS_LIFE_EXPECTANCY = 40;
 int PLANTS_ENERGY_BASE_PER_CYCLE = 30; 
 int PLANTS_RANDOM_BORN_CHANCES = 5000;
@@ -34,7 +35,8 @@ void setup() {
 }
 
 void draw() {
-  plants_individuals = 0;
+  plantsCountLastIteration = plantsCount;
+  plantsCount = 0;
   background(0);
   for (int x = 0; x < matrixSizeX; x++) {
     for (int y = 0; y < matrixSizeY; y++) {
@@ -44,7 +46,7 @@ void draw() {
       ellipse((x+1)*(circleSize+padding),(y+1)*(circleSize+padding),circleSize,circleSize);
     }
   }
-  delay(10);
+  //delay(10);
 }
 
 void calculateNextIteration(int x,int y) {
@@ -110,7 +112,7 @@ void calculateNextIteration(int x,int y) {
   if (plantsMatrix[x][y][0]>0 && plantsMatrix[x][y][0] < PLANTS_LIFE_EXPECTANCY + plantsVitality) {
     plantsMatrix[x][y][0] += 1;
     plantsMatrix[x][y][1] = plantsMatrix[x][y][1] + PLANTS_ENERGY_BASE_PER_CYCLE + plantsGeneration;
-    plants_individuals += 1;
+    plantsCount += 1;
   }
   // plant reproduction
   if (plantsReproduction > 0 && plantsMatrix[x][y][0] == 0 && neighbours > 0) {
@@ -124,16 +126,16 @@ void calculateNextIteration(int x,int y) {
     if (randomNumber == 1) {
       plantsMatrix[x][y][0] = 1;
       plantsMatrix[x][y][1] = PLANTS_ENERGY_BASE_PER_CYCLE + plantsGeneration;
-      plants_individuals += 1;
+      plantsCount += 1;
     }
   }
   // spontaneous generation
-  if (plantsMatrix[x][y][0] == 0 && neighbours == 0 && plants_individuals == 0) {
+  if (plantsMatrix[x][y][0] == 0 && neighbours == 0 && plantsCount == 0 && plantsCountLastIteration == 0) {
     randomNumber = int(random(1,PLANTS_RANDOM_BORN_CHANCES));
     if (randomNumber == 1) {
       plantsMatrix[x][y][0] = 1;
       plantsMatrix[x][y][1] = PLANTS_ENERGY_BASE_PER_CYCLE + plantsGeneration;
-      plants_individuals += 1;
+      plantsCount += 1;
     }
   }
 }
