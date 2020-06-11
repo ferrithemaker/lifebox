@@ -16,10 +16,10 @@ int plantsCountLastIteration = 0;
 
 // hardcoded plants data parameters (only for testing)
 int[] plantsParameters={ 100, 100, 100} ;
-int PLANTS_LIFE_EXPECTANCY = 40;
-int PLANTS_ENERGY_BASE_PER_CYCLE = 30; 
-int PLANTS_RANDOM_BORN_CHANCES = 5000;
-int PLANTS_NEARBORN_CHANCES = 120;
+final int PLANTS_LIFE_EXPECTANCY = 40;
+final int PLANTS_ENERGY_BASE_PER_CYCLE = 30; 
+final int PLANTS_RANDOM_BORN_CHANCES = 5000;
+final int PLANTS_NEARBORN_CHANCES = 120;
 
 void setup() {
   size(1920, 1080);
