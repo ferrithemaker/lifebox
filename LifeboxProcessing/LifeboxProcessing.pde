@@ -14,7 +14,7 @@ int[][][] plantsMatrix = new int[matrixSizeX][matrixSizeY][2];
 int plantsCount = 0;
 int plantsCountLastIteration = 0;
 
-// harcoded plants data parameters
+// hardcoded plants data parameters (only for testing)
 int[] plantsParameters={ 100, 100, 100} ;
 int PLANTS_LIFE_EXPECTANCY = 40;
 int PLANTS_ENERGY_BASE_PER_CYCLE = 30; 
