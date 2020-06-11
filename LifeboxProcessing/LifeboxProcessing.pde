@@ -7,8 +7,7 @@ int matrixSizeX = 75;
 int matrixSizeY = 42;
 int circleSize = 20;
 int padding = 5;
-int screenSizeX = (matrixSizeX*(circleSize+padding));
-int screenSizeY = (matrixSizeY*(circleSize+padding));
+
 
 // plants variables
 int[][][] plantsMatrix = new int[matrixSizeX][matrixSizeY][2];
