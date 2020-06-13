@@ -3,11 +3,16 @@
  */
 
 // screen variables
-int matrixSizeX = 75;
-int matrixSizeY = 42;
-int circleSize = 20;
-int padding = 5;
+int matrixSizeX = 95;
+int matrixSizeY = 53;
+int shapeSize = 20;
+int padding = 0;
+boolean noColor = true;
+boolean simulationAlterations = true;
 
+int style = 1;
+// best setup for style 0 (circles)int matrixSizeX = 75; int matrixSizeY = 42; int shapeSize = 20; int padding = 5; boolean noColor = false; boolean simulationAlterations = false;
+// best setup for style 1 (squares)int matrixSizeX = 95; int matrixSizeY = 53; int shapeSize = 20; int padding = 0; boolean noColor = true; boolean simulationAlterations = true;
 
 // plants variables
 int[][][] plantsMatrix = new int[matrixSizeX][matrixSizeY][2];
@@ -31,6 +36,7 @@ void setup() {
        plantsMatrix[x][y][1]=0; // set energy to 0
     }
   }
+  noStroke();
 }
 
 void draw() {
@@ -40,9 +46,17 @@ void draw() {
   for (int x = 0; x < matrixSizeX; x++) {
     for (int y = 0; y < matrixSizeY; y++) {
       calculatePlantsNextIteration(x,y);
-      stroke(0,map(plantsMatrix[x][y][1],0,12000,0,240),0);
-      fill(0,map(plantsMatrix[x][y][1],0,12000,0,240),0);
-      ellipse((x+1)*(circleSize+padding),(y+1)*(circleSize+padding),circleSize,circleSize);
+      if (noColor) {
+        fill(map(plantsMatrix[x][y][1],0,12000,0,250));
+      } else {
+        fill(0,map(plantsMatrix[x][y][1],0,12000,0,240),0);
+      }
+      if (style == 0) {
+        ellipse((x+1)*(shapeSize+padding),(y+1)*(shapeSize+padding),shapeSize,shapeSize);
+      }
+      if (style == 1) {
+        rect(x*(shapeSize+padding),y*(shapeSize+padding),shapeSize,shapeSize);
+      }
     }
   }
   //delay(10);
@@ -111,6 +125,9 @@ void calculatePlantsNextIteration(int x,int y) {
   if (plantsMatrix[x][y][0]>0 && plantsMatrix[x][y][0] < PLANTS_LIFE_EXPECTANCY + plantsVitality) {
     plantsMatrix[x][y][0] += 1;
     plantsMatrix[x][y][1] = plantsMatrix[x][y][1] + PLANTS_ENERGY_BASE_PER_CYCLE + plantsGeneration;
+    if (simulationAlterations) {
+      plantsMatrix[x][y][1] = plantsMatrix[x][y][1] - (plantsMatrix[x][y][0] * int(PLANTS_ENERGY_BASE_PER_CYCLE/7));
+    }    
     plantsCount += 1;
   }
   // plant reproduction
