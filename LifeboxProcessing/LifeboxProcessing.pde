@@ -5,7 +5,7 @@
 // screen variables
 int matrixSizeX = 95;
 int matrixSizeY = 53;
-int shapeSize = 20;
+int shapeSize = 10; // 10 for small screen size, 20 for fullHD
 int padding = 0;
 boolean noColor = true;
 boolean simulationAlterations = true;
@@ -27,7 +27,8 @@ final int PLANTS_RANDOM_BORN_CHANCES = 5000;
 final int PLANTS_NEARBORN_CHANCES = 120;
 
 void setup() {
-  size(1920, 1080);
+  //size(1920, 1080);
+  size(900, 506); // smaller screen
   
   // init the plantsMatrix
   for (int x = 0; x < matrixSizeX; x++) {
