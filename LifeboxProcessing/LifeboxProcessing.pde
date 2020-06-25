@@ -28,13 +28,18 @@ final int PLANTS_NEARBORN_CHANCES = 120;
 
 void setup() {
   //size(1920, 1080);
+<<<<<<< Updated upstream
   size(900, 506); // smaller screen
   
+=======
+  fullScreen(P2D);
+  //smooth(8);
+>>>>>>> Stashed changes
   // init the plantsMatrix
   for (int x = 0; x < matrixSizeX; x++) {
     for (int y = 0; y < matrixSizeY; y++) {
       plantsMatrix[x][y][0]=0; // set age to 0
-       plantsMatrix[x][y][1]=0; // set energy to 0
+      plantsMatrix[x][y][1]=0; // set energy to 0
     }
   }
   noStroke();
@@ -46,29 +51,29 @@ void draw() {
   background(0);
   for (int x = 0; x < matrixSizeX; x++) {
     for (int y = 0; y < matrixSizeY; y++) {
-      calculatePlantsNextIteration(x,y);
+      calculatePlantsNextIteration(x, y);
       if (noColor) {
-        fill(map(plantsMatrix[x][y][1],0,12000,0,250));
+        fill(map(plantsMatrix[x][y][1], 0, 8000, 0, 250));
       } else {
-        fill(0,map(plantsMatrix[x][y][1],0,12000,0,240),0);
+        fill(0, map(plantsMatrix[x][y][1], 0, 12000, 0, 240), 0);
       }
       if (style == 0) {
-        ellipse((x+1)*(shapeSize+padding),(y+1)*(shapeSize+padding),shapeSize,shapeSize);
+        ellipse((x+1)*(shapeSize+padding), (y+1)*(shapeSize+padding), shapeSize, shapeSize);
       }
       if (style == 1) {
-        rect(x*(shapeSize+padding),y*(shapeSize+padding),shapeSize,shapeSize);
+        rect(x*(shapeSize+padding), y*(shapeSize+padding), shapeSize, shapeSize);
       }
     }
   }
   //delay(10);
 }
 
-void calculatePlantsNextIteration(int x,int y) {
+void calculatePlantsNextIteration(int x, int y) {
   int neighbours = 0;
   int plantsReproduction = plantsParameters[0];
   int plantsVitality = plantsParameters[1];
   int plantsGeneration = plantsParameters[2];
-  int randomBorn,randomNumber;
+  int randomBorn, randomNumber;
 
   // adjacent coordinates
   int xp = x+1;
@@ -96,22 +101,22 @@ void calculatePlantsNextIteration(int x,int y) {
   }
   if (plantsMatrix[x][y][0] == 0 && plantsMatrix[xm][ym][0] > 0) {
     neighbours += 1;
-   }
+  }
   if (plantsMatrix[x][y][0] == 0 && plantsMatrix[x][ym][0] > 0) {
     neighbours += 1;
-   }
+  }
   if (plantsMatrix[x][y][0] == 0 && plantsMatrix[xp][ym][0] > 0) {
     neighbours += 1;
-   }
+  }
   if (plantsMatrix[x][y][0] == 0 && plantsMatrix[xm][yp][0] > 0) {
     neighbours += 1;
-   }
+  }
   if (plantsMatrix[x][y][0] == 0 && plantsMatrix[x][yp][0] > 0) {
     neighbours += 1;
-   }
+  }
   if (plantsMatrix[x][y][0] == 0 && plantsMatrix[xp][yp][0] > 0) {
     neighbours += 1;
-   }
+  }
   // if too old, the plant dies
   if (plantsMatrix[x][y][0] >= PLANTS_LIFE_EXPECTANCY + plantsVitality) {
     plantsMatrix[x][y][0] = 0;
@@ -135,11 +140,10 @@ void calculatePlantsNextIteration(int x,int y) {
   if (plantsReproduction > 0 && plantsMatrix[x][y][0] == 0 && neighbours > 0) {
     if (PLANTS_NEARBORN_CHANCES - plantsReproduction < 2) {
       randomBorn = 2;
-    }
-    else {
+    } else {
       randomBorn = PLANTS_NEARBORN_CHANCES - plantsReproduction;
     }
-    randomNumber = int(random(1,randomBorn));
+    randomNumber = int(random(1, randomBorn));
     if (randomNumber == 1) {
       plantsMatrix[x][y][0] = 1;
       plantsMatrix[x][y][1] = PLANTS_ENERGY_BASE_PER_CYCLE + plantsGeneration;
@@ -148,7 +152,7 @@ void calculatePlantsNextIteration(int x,int y) {
   }
   // spontaneous generation
   if (plantsMatrix[x][y][0] == 0 && neighbours == 0 && plantsCount == 0 && plantsCountLastIteration == 0) {
-    randomNumber = int(random(1,PLANTS_RANDOM_BORN_CHANCES));
+    randomNumber = int(random(1, PLANTS_RANDOM_BORN_CHANCES));
     if (randomNumber == 1) {
       plantsMatrix[x][y][0] = 1;
       plantsMatrix[x][y][1] = PLANTS_ENERGY_BASE_PER_CYCLE + plantsGeneration;
