@@ -28,15 +28,12 @@ final int PLANTS_NEARBORN_CHANCES = 120;
 
 void setup() {
   //size(1920, 1080);
-<<<<<<< Updated upstream
   size(900, 506); // smaller screen
-  
-=======
-  fullScreen(P2D);
+  //fullScreen(P2D);
   //smooth(8);
->>>>>>> Stashed changes
   // init the plantsMatrix
-  for (int x = 0; x < matrixSizeX; x++) {
+  
+ for (int x = 0; x < matrixSizeX; x++) {
     for (int y = 0; y < matrixSizeY; y++) {
       plantsMatrix[x][y][0]=0; // set age to 0
       plantsMatrix[x][y][1]=0; // set energy to 0
