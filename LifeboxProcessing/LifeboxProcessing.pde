@@ -3,19 +3,20 @@
  */
 
 // screen variables
-int matrixSizeX = 95;
-int matrixSizeY = 53;
-int shapeSize = 10; // 10 for small screen size, 20 for fullHD
+int matrixSizeX = 6;
+int matrixSizeY = 6;
+int shapeSize = 80; // 10 for small screen size, 20 for fullHD
 int padding = 0;
-boolean noColor = true;
+boolean noColor = false;
 boolean simulationAlterations = true;
+boolean metaballs = true;
 
 int style = 1;
 // best setup for style 0 (circles)int matrixSizeX = 75; int matrixSizeY = 42; int shapeSize = 20; int padding = 5; boolean noColor = false; boolean simulationAlterations = false;
 // best setup for style 1 (squares)int matrixSizeX = 95; int matrixSizeY = 53; int shapeSize = 20; int padding = 0; boolean noColor = true; boolean simulationAlterations = true;
 
 // plants variables
-int[][][] plantsMatrix = new int[matrixSizeX][matrixSizeY][2];
+int[][][] plantsMatrix = new int[matrixSizeX][matrixSizeY][4]; // [0] age [1] energy [2] xpos [3] ypos
 int plantsCount = 0;
 int plantsCountLastIteration = 0;
 
@@ -28,15 +29,18 @@ final int PLANTS_NEARBORN_CHANCES = 120;
 
 void setup() {
   //size(1920, 1080);
-  size(900, 506); // smaller screen
+  size(480, 480); // smaller screen
   //fullScreen(P2D);
-  //smooth(8);
+  smooth(8);
   // init the plantsMatrix
+  colorMode(HSB);
   
  for (int x = 0; x < matrixSizeX; x++) {
     for (int y = 0; y < matrixSizeY; y++) {
       plantsMatrix[x][y][0]=0; // set age to 0
       plantsMatrix[x][y][1]=0; // set energy to 0
+      plantsMatrix[x][y][2]=((x+1)*(shapeSize+padding));
+      plantsMatrix[x][y][3]=((y+1)*(shapeSize+padding));  
     }
   }
   noStroke();
@@ -46,21 +50,53 @@ void draw() {
   plantsCountLastIteration = plantsCount;
   plantsCount = 0;
   background(0);
+  if (metaballs == false) {
+    for (int x = 0; x < matrixSizeX; x++) {
+      for (int y = 0; y < matrixSizeY; y++) {
+        calculatePlantsNextIteration(x, y);
+        if (noColor) {
+          fill(map(plantsMatrix[x][y][1], 0, 8000, 0, 250));
+        } else {
+          fill(0, map(plantsMatrix[x][y][1], 0, 12000, 0, 240), 0);
+        }
+        if (style == 0) {
+          ellipse((x+1)*(shapeSize+padding), (y+1)*(shapeSize+padding), shapeSize, shapeSize);
+        }
+        if (style == 1) {
+          rect(x*(shapeSize+padding), y*(shapeSize+padding), shapeSize, shapeSize);
+        }
+      }
+    }
+  } else {
+  // make calculations
   for (int x = 0; x < matrixSizeX; x++) {
     for (int y = 0; y < matrixSizeY; y++) {
       calculatePlantsNextIteration(x, y);
-      if (noColor) {
-        fill(map(plantsMatrix[x][y][1], 0, 8000, 0, 250));
-      } else {
-        fill(0, map(plantsMatrix[x][y][1], 0, 12000, 0, 240), 0);
-      }
-      if (style == 0) {
-        ellipse((x+1)*(shapeSize+padding), (y+1)*(shapeSize+padding), shapeSize, shapeSize);
-      }
-      if (style == 1) {
-        rect(x*(shapeSize+padding), y*(shapeSize+padding), shapeSize, shapeSize);
-      }
+      plantsMatrix[x][y][2] += int(random(-5,6));
+      plantsMatrix[x][y][3] += int(random(-5,6));
     }
+  }
+  // set pixels color
+  loadPixels();
+  for (int xPixel = 0; xPixel < width; xPixel++) {
+    for (int yPixel = 0; yPixel < height; yPixel++) {
+      int indexPixel = xPixel + yPixel * width;
+      float sum = 0;
+      for (int x = 0; x < matrixSizeX; x++) {
+        for (int y = 0; y < matrixSizeY; y++) {
+          float intensity = (float((plantsMatrix[x][y][0] * plantsMatrix[x][y][1])/40) / (dist(xPixel, yPixel,plantsMatrix[x][y][2],plantsMatrix[x][y][3])/0.5));
+          sum += intensity * 1.5;
+        }
+      }
+      if (noColor) {
+        pixels[indexPixel] = color(sum);
+      } else {
+        pixels[indexPixel] = color(constrain(sum,10,220),100,200);
+      }
+      //println(sum);
+    }
+   }
+  updatePixels();
   }
   //delay(10);
 }
