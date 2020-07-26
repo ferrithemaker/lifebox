@@ -42,7 +42,7 @@ Main lifebox script, reads data from 'controllerdata' file and runs the simulati
 
 Reads data from Arduino based lifebox controller and saves it to 'controllerdata'.
 
-**readonline.py:**
+**readwebapp.py:**
 
 Reads data from webapp and saves it to 'controllerdata'.
 
