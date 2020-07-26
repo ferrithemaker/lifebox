@@ -627,11 +627,11 @@ def readPotDatafromArduino(stop):
 	#print("Arduino connection error! Change to app mode.")
 	#os._exit(1)
 
-midi_enable = True # play generative sound through midi out (beta)
+midi_enable = False # play generative sound through midi out (beta)
 graph_mode = False # show graphs
 real_mode = True # respawn control
 gradient_mode = True # individual fade in / out linked to energy
-fullscreen_mode = False
+fullscreen_mode = True
 fullscreen_graph = False
 debug = False
 rf = 2 # reduction factor

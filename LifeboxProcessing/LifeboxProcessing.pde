@@ -84,8 +84,8 @@ void draw() {
       float sum = 0;
       for (int x = 0; x < matrixSizeX; x++) {
         for (int y = 0; y < matrixSizeY; y++) {
-          float intensity = (float((plantsMatrix[x][y][0] * plantsMatrix[x][y][1])/40) / (dist(xPixel, yPixel,plantsMatrix[x][y][2],plantsMatrix[x][y][3])/0.5));
-          sum += intensity * 1.5;
+          float intensity = (float((plantsMatrix[x][y][0] * plantsMatrix[x][y][1])/20) / (dist(xPixel, yPixel,plantsMatrix[x][y][2],plantsMatrix[x][y][3])/1.1));
+          sum += intensity * 0.8;
         }
       }
       if (noColor) {
