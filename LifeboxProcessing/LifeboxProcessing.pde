@@ -3,13 +3,13 @@
  */
 
 // screen variables
-int matrixSizeX = 10;
-int matrixSizeY = 10;
+int matrixSizeX = 50;
+int matrixSizeY = 27;
 int shapeSize = 40; // 10 for small screen size, 20 for fullHD
 int padding = 0;
 boolean noColor = false;
-boolean simulationAlterations = true;
-boolean metaballs = true;
+boolean simulationAlterations = false;
+boolean metaballs = false;
 
 int style = 1;
 // best setup for style 0 (circles)int matrixSizeX = 75; int matrixSizeY = 42; int shapeSize = 20; int padding = 5; boolean noColor = false; boolean simulationAlterations = false;
@@ -31,8 +31,8 @@ int species2CountLastIteration = 0;
 
 // hardcoded data parameters only for testing)
 int[] plantsParameters = { 160, 200, 70};
-int[] specie1Parameters = { 512, 512, 512, 512};
-int[] specie2Parameters = { 512, 512, 512, 512};
+int[] specie1Parameters = { 80, 80, 80, 80};
+int[] specie2Parameters = { 80, 80, 80, 80};
 
 final int PLANTS_LIFE_EXPECTANCY = 70;
 final int PLANTS_ENERGY_BASE_PER_CYCLE = 50; 
@@ -57,8 +57,8 @@ final int SPECIE2_RANDOM_BORN_CHANCES = 5000;
 
 
 void setup() {
-  //size(1920, 1080);
-  size(400, 400); // smaller screen
+  size(1920, 1080);
+  //size(400, 400); // smaller screen
   //fullScreen(P2D);
   //smooth(1);
   // init the plantsMatrix
@@ -97,11 +97,23 @@ void draw() {
     for (int x = 0; x < matrixSizeX; x++) {
       for (int y = 0; y < matrixSizeY; y++) {
         calculatePlantsNextIteration(x, y);
+        calculateSpeciesNextIteration(x,y);
         //println(plantsMatrix[x][y][1]);
         if (noColor) {
           fill(map(plantsMatrix[x][y][1], 0, 8000, 0, 255));
         } else {
-          fill(0, map(plantsMatrix[x][y][1], 0, 8000, 0, 255), 0);
+          if (plantsMatrix[x][y][0]>0) {
+            fill(0, map(plantsMatrix[x][y][1], 0, 8000, 0, 255), 0);
+          }
+          if (specie1Matrix[x][y][0]>0) {
+            fill(map(specie1Matrix[x][y][1], 0, 8000, 0, 255),0 , 0);
+            //print("specie1 alive!");
+          }
+          if (specie2Matrix[x][y][0]>0) {
+            fill(0, 0, map(specie2Matrix[x][y][1], 0, 8000, 0, 255));
+            //print("specie2 alive!");
+          }
+          fill(map(specie1Matrix[x][y][1], 0, 8000, 0, 255), map(plantsMatrix[x][y][1], 0, 8000, 0, 255), map(specie2Matrix[x][y][1], 0, 8000, 0, 255));
         }
         if (style == 0) {
           ellipse((x+1)*(shapeSize+padding), (y+1)*(shapeSize+padding), shapeSize, shapeSize);
@@ -116,8 +128,13 @@ void draw() {
     for (int x = 0; x < matrixSizeX; x++) {
       for (int y = 0; y < matrixSizeY; y++) {
         calculatePlantsNextIteration(x, y);
+        calculateSpeciesNextIteration(x,y);
         plantsMatrix[x][y][2] += int(random(-5, 5));
         plantsMatrix[x][y][3] += int(random(-5, 5));
+        specie1Matrix[x][y][2] += int(random(-5, 5));
+        specie1Matrix[x][y][3] += int(random(-5, 5));
+        specie2Matrix[x][y][2] += int(random(-5, 5));
+        specie2Matrix[x][y][3] += int(random(-5, 5));
       }
     }
     // set pixels color
@@ -253,7 +270,7 @@ void calculatePlantsNextIteration(int x, int y) {
 void calculateSpeciesNextIteration(int x, int y) {
   int pos;
   int rand_pos;
-  float random_number;
+  int random_number;
   int energy_gathered;
   float randomborn;
   
@@ -350,6 +367,7 @@ void calculateSpeciesNextIteration(int x, int y) {
   // --- SPICE 1 ---
   // individual is alive?
   if (specie1Matrix[x][y][0] > 0) {
+    //println("esta viva");
     // try to eat
     if (plantsMatrix[x][y][1] > 0) {
       energy_gathered=0;
@@ -386,7 +404,7 @@ void calculateSpeciesNextIteration(int x, int y) {
         } else {
           randomborn = map(SPECIE1_NEARBORN_CHANCES - int(sp1Reproduction), 2, 120, 2, 20);
         }
-        random_number = random(1, randomborn+1);
+        random_number = int(random(1, randomborn+1));
         if (specie1Matrix[xm][y][0] == 0) {
           available_spots[pos] = 1;
           pos += 1;
@@ -469,8 +487,11 @@ void calculateSpeciesNextIteration(int x, int y) {
   }
   // if no individual is alive, random born to avoid extintion
   if (specie1Matrix[x][y][0] == 0 && specie1_neighbours==0 && species1Count == 0) {
-      random_number = random(1, SPECIE1_RANDOM_BORN_CHANCES+1);
+      //println("TRY TO BORN");
+      random_number = int(random(1, SPECIE1_RANDOM_BORN_CHANCES+1));
+      //println(random_number);
     if (random_number==1) {
+      //println("BORN");
       specie1Matrix[x][y][0] = 1;
       specie1Matrix[x][y][1] = SPECIE1_ENERGY_BASE;
       species1Count += 1;
@@ -516,7 +537,7 @@ void calculateSpeciesNextIteration(int x, int y) {
         else {
           randomborn = map(SPECIE2_NEARBORN_CHANCES - int(sp2Reproduction), 2, 120, 2, 20);
         }
-        random_number = random(1, randomborn+1);
+        random_number = int(random(1, randomborn+1));
         if (specie2Matrix[xm][y][0] == 0) {
           available_spots[pos] = 1;
           pos += 1;
@@ -600,7 +621,7 @@ void calculateSpeciesNextIteration(int x, int y) {
   }
   //if no individual is alive, random born to avoid extintion
   if (specie2Matrix[x][y][0] == 0 && specie2_neighbours==0 && species2Count == 0) {
-    random_number = random(1, SPECIE2_RANDOM_BORN_CHANCES+1);
+    random_number = int(random(1, SPECIE2_RANDOM_BORN_CHANCES+1));
     if (random_number==1) {
       specie2Matrix[x][y][0] = 1;
       specie2Matrix[x][y][1] = SPECIE2_ENERGY_BASE;
