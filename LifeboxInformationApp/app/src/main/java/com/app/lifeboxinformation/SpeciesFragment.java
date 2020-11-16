@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 
 public class SpeciesFragment extends Fragment {
 
-    String htmlText = "<p>Inside the LifeBox you can find two species, the blue and the yellow one, and both species have a set of parameters that defines how they can evolve inside the virtual ecosystem. " +
+    String htmlText = "<p><b>SPECIES INFORMATION<b></p><p>Inside the LifeBox you can find two species, the blue and the yellow one, and both species have a set of parameters that defines how they can evolve inside the virtual ecosystem. " +
             "You can change each parameter of each species individually.</p>" +
             "<p><b>The species parameters</b></p> " +
             "<p><b>LIFE:</b> Life expectancy of species individuals. <i>High values are better.</i></p> " +

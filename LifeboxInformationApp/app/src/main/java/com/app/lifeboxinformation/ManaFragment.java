@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 
 public class ManaFragment extends Fragment {
 
-    String htmlText = "<p>Every species need to gather energy from the green mana to grow, reproduce and survive. This mana also has a set of parameters that defines its behavior inside the LifeBox ecosystem.</p>" +
+    String htmlText = "<p><b>MANA INFORMATION</b></p><p>Every species need to gather energy from the green mana to grow, reproduce and survive. This mana also has a set of parameters that defines its behavior inside the LifeBox ecosystem.</p>" +
             "<p><b>The green ‘mana’ parameters</b></p> " +
             "<p><b>LIFE:</b> Life expectancy of species individuals.<i>High values are better.</i></p> " +
             "<p><b>REPRODUCTION:</b> Reproduction capability of species individuals. <i>High values are better.</i></p> " +
